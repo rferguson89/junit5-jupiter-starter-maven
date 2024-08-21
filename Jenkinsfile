@@ -5,27 +5,24 @@ pipeline {
         stage('Build') {
             steps {
                 // Run the Maven build
-                './mvnw clean compile'
+                sh './mvnw clean compile'
             }
         }
 
         stage('Test') {
             steps {
                 // Run the JUnit tests using Maven
-                './mvnw test'
-            }
-
-            post {
-                // Capture the test results and publish them
-                always {
-                    junit 'target/surefire-reports/**/*.xml'
-                }
+                sh './mvnw test'
             }
         }
     }
 
     post {
-        // Cleanup actions or final notifications
+        always {
+            // Capture the test results and publish them
+            junit 'target/surefire-reports/**/*.xml'
+        }
+        
         success {
             echo 'Build and tests succeeded.'
         }
